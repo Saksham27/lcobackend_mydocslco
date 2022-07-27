@@ -1,0 +1,247 @@
+openapi: 3.0.0
+info:
+  title: Dcumentation API
+  description: A simple api to practice documentation.
+  version: 1.1.0
+  contact: 
+    email: geekysaksham27@gmail.com
+    url: "https://saksham27.github.io/"
+# servers:
+#   - url: https://localhost:4000/api/v1
+#     description: for localhost - secure
+#   - url: https://localhost:4000/api/v1
+#     description: for localhost - regular
+
+servers:
+  - url: "{protocal}://localhost:4000/api/{version}"
+    description: for localhost
+    variables: 
+      version: 
+        default: v1
+        enum:
+          - v1
+          - v2
+      protocal:
+        default: http
+        enum:
+          - https
+          - http
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: token
+    BearerAuth:
+      type: http
+      scheme: bearer
+      
+paths:
+  /lco:
+    get:
+      tags: 
+        - String
+      summary: return a greet message from LCO
+      responses:
+        200:
+          description: All good success
+          content: 
+            application/json:
+              schema:
+                type: string
+                example: "mystring"
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+
+  /lcoobject:
+    get:
+      tags: 
+        - Object
+      summary: return a course
+      responses:
+        200:
+          description: All good success
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  price:
+                    type: number
+                
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+
+  /courses:
+    get:
+      tags: 
+        - Arrays
+      summary: return all courses
+      responses:
+        200:
+          description: All good success
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    price:
+                      type: number
+                
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+
+  /mycourses/{courseId}:
+    get:
+      tags: 
+        - String
+      summary: return course based on provided courseId
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          default: 22
+          schema:
+            type: string
+      responses:
+        200:
+          description: All good success
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  price:
+                    type: number
+                
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+
+  /addcourse:
+    post:
+      tags: 
+        - String
+      summary: adds a new course to existing courses
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                name:
+                  type: string
+                price:
+                  type: number
+
+      responses:
+        200:
+          description: All good success
+          content: 
+            application/json:
+              schema:
+                type: boolean
+                
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+
+  /coursequery:
+    get:
+      tags: 
+        - String
+      summary: query request
+      parameters:
+        - name: location
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [delhi, london, jaipur]
+        - name: device
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [web, mobile]
+
+      responses:
+        200:
+          description: All good success
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  location:
+                    type: string
+                  device:
+                    type: string
+                
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+
+
+  /courseupload:
+    post:
+      tags: 
+        - String
+
+      summary: upload image
+      parameters:
+        - in: header
+          name: auth
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object  
+              properties:
+                uploadedFile:
+                  type: string
+                  format: binary
+
+      responses:
+        200:
+          description: All good success
+          content: 
+            application/json:
+              schema:
+                type: boolean
+                
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
